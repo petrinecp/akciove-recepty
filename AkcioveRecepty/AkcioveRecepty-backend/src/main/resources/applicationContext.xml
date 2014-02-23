@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+          http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+">
+    <tx:annotation-driven/>
+    <context:annotation-config/>
+    
+    <context:component-scan base-package="cz.muni.fi.pv239.akcioverecepty.dao"/>
+    
+    <bean id="ingredient" class="cz.muni.fi.pv239.akcioverecepty.dao.IngredientDAOImpl"/>
+    <bean id="category" class="cz.muni.fi.pv239.akcioverecepty.dao.CategoryDAOImpl"/>
+    <bean id="food" class="cz.muni.fi.pv239.akcioverecepty.dao.FoodDAOImpl"/>
+    <bean id="recipe" class="cz.muni.fi.pv239.akcioverecepty.dao.RecipeDAOImpl"/>
+    
+    <!-- Repository (DAO) exceptions translation to DataAccessException -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <!-- Database configuration -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="AkcioveReceptyPU"/>
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver"/>
+        <property name="url" value="jdbc:derby://localhost:1527/AkcioveReceptyDB"/>
+        <property name="username" value="rootadmin"/>
+        <property name="password" value="lampareprakgenius"/>
+    </bean>
+    
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    
+</beans>
